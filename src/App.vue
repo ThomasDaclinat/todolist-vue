@@ -10,7 +10,7 @@
   <label>
     <input type="checkbox" v-model="hideCompleted"> Masquer les tâches complétées
   </label>
-
+  <hr>
   <div v-if="todos.length === 0">Aucune tâche à effectuer</div>
   <div v-else>
     <ul>
@@ -30,18 +30,7 @@ import { ref } from 'vue'
 
 const newTodo = ref('');
 const hideCompleted = ref(false);
-const todos = ref([
-  {
-    title: 'Tâche de test',
-    completed: true,
-    date: 1
-  },
-  {
-    title: 'Tâche à faire',
-    completed: false,
-    date: 2
-  },
-]);
+const todos = ref([]);
 
 const addTodo = () => {
   todos.value.push({
