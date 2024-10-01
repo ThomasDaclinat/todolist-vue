@@ -1,31 +1,65 @@
 <template>
+  <Layout>
+    <template #header>
+      Header
+    </template>
+  </Layout>
+  <Layout>
+    <template #aside>
+      Sidebar
+    </template>
+  </Layout>
+  <Layout>
+    <template #main>
+      Main
+    </template>
+  </Layout>
+  <Layout>
+    <template #footer>
+      Footer
+    </template>
+  </Layout>
+  <Button>
+    <strong>Demo</strong> de bouton
+  </Button>
   <main class="scroll-container">
+    <!-- Main title -->
     <h1>TodoList-Vue</h1>
+
+    <!-- Form -->
+
     <form action="" @submit.prevent="addTodo">
       <fieldset role="group">
-        <input v-model="newTodo" type="text" placeholder="Tâche à effectuer">
+        <input v-model="newTodo" type="text" placeholder="Nouvelle tâche">
         <button :disabled="newTodo.length == 0">Ajouter</button>
       </fieldset>
     </form>
+
+    <!-- Hide completed tasked  -->
     <label>
       <input type="checkbox" v-model="hideCompleted">
       Masquer les tâches complétées
     </label>
     <p v-if="remainingTodos > 0">Il reste {{ remainingTodos }} tâche{{ remainingTodos > 1 ? 's' : '' }} à compléter</p>
+    <!-- <Checkbox label="Bonjour" /> -->
     <hr>
+
+    <!-- Generated Todo List -->
     <div v-if="todos.length === 0">Aucune tâche à effectuer</div>
-    <div v-else>
+    <div v-else class="todolist">
       <ul>
         <li v-for="todo in sortedTodos" :key="todo.date" :class="{ completed: todo.completed }">
-          <label>
+          <!-- <label>
             <input type="checkbox" v-model="todo.completed">
             {{ todo.title }}
           </label>
+          <Checkbox :label="todo.title" @check="(p) => console.log('coché', p)" @uncheck="console.log('déchoché')" /> -->
+          <Checkbox :label="todo.title" v-model="todo.completed" />
         </li>
       </ul>
     </div>
   </main>
-  <css-doodle>
+  <!-- <css-doodle>
     :doodle {
     @grid: 7 / 100vmax / #0a0c27;
     position: absolute;
@@ -37,15 +71,25 @@
     transform:
     scale(@r(.2, 1.5))
     translate(@m2.@r(±50%));
-  </css-doodle>
+  </css-doodle> -->
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import Checkbox from './Checkbox.vue'
+import Button from './Button.vue'
+import Layout from './Layout.vue'
+
 
 const newTodo = ref('');
 const hideCompleted = ref(false);
 const todos = ref([]);
+
+onMounted(() => {
+  fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(r => r.json())
+    .then(v => todos.value = v.map(todo => ({ ...todo, date: todo.id })))
+})
 
 const addTodo = () => {
   todos.value.push({
@@ -67,7 +111,7 @@ const sortedTodos = computed(() => {
 
 const remainingTodos = computed(() => {
   return todos.value.filter(t => t.completed === false).length
-})
+});
 
 </script>
 
