@@ -19,6 +19,16 @@
       Footer
     </template>
   </Layout>
+
+  <!-- Select -->
+  <select name="select" aria-label="Select" required>
+    <option selected disabled value="">Select your country</option>
+    <option selected>France</option>
+    <option>Canada</option>
+    <option>Gas</option>
+    <option>Plasma</option>false
+  </select>
+
   <Button>
     <strong>Demo</strong> de bouton
   </Button>
